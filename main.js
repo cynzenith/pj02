@@ -41,7 +41,7 @@ function render() {
                 <i class="fa-solid fa-arrow-rotate-left"></i>
                 </button>
                 <button onclick="deleteTask('${taskList[i].id}')">
-                <i class="fa-regular fa-trash"></i>  <!-- 삭제 아이콘 -->
+                <i class="fa-regular fa-trash-can"></i>
                 </button>
             </div>
         </div>`;
@@ -55,7 +55,7 @@ function render() {
                     <i class="fa-solid fa-check"></i>
                 </button>
                 <button onclick="deleteTask('${taskList[i].id}')">
-                <i class="fa-regular fa-trash"></i>  <!-- 삭제 아이콘 -->
+                <i class="fa-regular fa-trash-can"></i>
                 </button>
             </div>
         </div>`;
