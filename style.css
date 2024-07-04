@@ -43,3 +43,9 @@ body{
     justify-content: space-between;
     padding: 1em;
 }
+
+.task-done{
+    text-decoration: line-through;
+    background-color: #d3d3d3;
+    width: 80%; 
+}
