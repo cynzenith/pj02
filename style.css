@@ -12,20 +12,24 @@ body{
     box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
 }
 
+.input-area {
+    margin: 10px 0px;
+}
+
 .task-area {
     border: 1px solid lightgray;
+    margin: 20px 0px;
 }
 
 .task-tabs {
     display: flex;
     border-bottom: 1px solid lightgray;
     position: relative;
-
 }
 
 .task-tabs div {
     padding: 1em;
-
+    cursor:pointer  /*div -> 버튼*/
 }
 
 #under-line {
@@ -33,7 +37,7 @@ body{
     background-color: pink;
     position: absolute;
     width: 60px;
-    left: 0;
+    left: 0px;
     top: 50px;
     padding: 0px;
 }
