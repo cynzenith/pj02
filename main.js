@@ -110,7 +110,7 @@ function toggleComplete(id) {
             break;
         }
     }
-    render()
+    filter({ target: { id: tabMode } });
 } 
 
 // 삭제 이벤트가 실행되면 i번째 요소 1개를 삭제하고 다시 렌더링하여 task를 표시
@@ -127,7 +127,7 @@ function deleteTask(id) {
             break;
         }
     }
-    render()
+    filter({ target: { id: tabMode } });
 }
 
 function filter(event) {
