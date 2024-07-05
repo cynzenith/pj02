@@ -58,9 +58,7 @@ function render() {
     //2. list가 다르게 출력되어야한다. 
     if(tabMode === "all") {
         list = taskList;
-    }else if(tabMode === "ongoing") {
-        list = filterList;
-    }else if(tabMode === "done") {
+    }else {
         list = filterList;
     }
 
@@ -68,40 +66,42 @@ function render() {
     for(let i = 0; i < list.length; i++) {
         // 완료된 경우 (class="task-done == 회색배경 + 밑줄, 회전 아이콘)
         if (list[i].isComplete) {
-            resultHTML += `<div class="task">
-            <div class="task-done">            
-                ${list[i].taskContent}  
-            </div>
-            <div>
-                <button onclick="toggleComplete('${list[i].id}')">
-                <i class="fa-solid fa-arrow-rotate-left"></i>
-                </button>
-                <button onclick="deleteTask('${list[i].id}')">
-                <i class="fa-regular fa-trash-can"></i>
-                </button>
-            </div>
-        </div>`;
+            resultHTML += 
+            `<div class="task">
+                <div class="task-done">            
+                    ${list[i].taskContent}  
+                </div>
+                <div>
+                    <button onclick="toggleComplete('${list[i].id}')">
+                        <i class="fa-solid fa-arrow-rotate-left"></i>
+                    </button>
+                    <button onclick="deleteTask('${list[i].id}')">
+                        <i class="fa-regular fa-trash-can"></i>
+                    </button>
+                </div>
+            </div>`;
         } else {
             // 완료되지 않은 경우
-            resultHTML += `<div class="task">
-            <div>
-                ${list[i].taskContent}  
-            </div>
-            <div>
-                <button onclick="toggleComplete('${list[i].id}')">
-                    <i class="fa-solid fa-check"></i>
-                </button>
-                <button onclick="deleteTask('${list[i].id}')">
-                <i class="fa-regular fa-trash-can"></i>
-                </button>
-            </div>
-        </div>`;
+            resultHTML += 
+            `<div class="task">
+                <div>
+                    ${list[i].taskContent}  
+                </div>
+                <div>
+                    <button onclick="toggleComplete('${list[i].id}')">
+                        <i class="fa-solid fa-check"></i>
+                    </button>
+                    <button onclick="deleteTask('${list[i].id}')">
+                        <i class="fa-regular fa-trash-can"></i>
+                    </button>
+                </div>
+            </div>`;
         } 
     }
     document.getElementById("task-board").innerHTML = resultHTML;
 }
 
-// 체크 이벤트를 클릭하면 토글 함수를 호출하여 isComplete를 반전시킨 후 다시 렌더링하여 task를 표시
+// 체크 이벤트를 클릭하면 토글 함수를 호출하여 isComplete를 반전시킨 후 다시 (필터함수->렌더함수)task를 표시
 function toggleComplete(id) {
     console.log("id:",id);
     for(let i=0; i<taskList.length; i++) {
@@ -110,10 +110,10 @@ function toggleComplete(id) {
             break;
         }
     }
-    filter({ target: { id: tabMode } });
+    filter();
 } 
 
-// 삭제 이벤트가 실행되면 i번째 요소 1개를 삭제하고 다시 렌더링하여 task를 표시
+// 삭제 이벤트가 실행되면 i번째 요소 1개를 삭제하고 다시 (필터함수->렌더함수) task를 표시
 function deleteTask(id) {
     for(let i=0; i<taskList.length; i++) {
         if(taskList[i].id == id) {
@@ -121,17 +121,20 @@ function deleteTask(id) {
             break;
         }
     }
-    for(let i=0; i<filterList.length; i++) {
-        if(filterList[i].id == id) {
-            filterList.splice(i,1)  // i의 요소를 삭제 + 1개 삭제
-            break;
-        }
-    }
-    filter({ target: { id: tabMode } });
+    filter();
 }
 
+// 구조: 탭모드에 맞게 필터링하고, 필터함수 내에서 다시 렌더링(render함수 호출)
 function filter(event) {
-    tabMode = event.target.id;
+        // 1) 탭을 클릭하면 이벤트가 발생하고 변경된 탭의 id("all", "ongoing", "done")에 맞게 필터링 된다.
+        // 2) 체크/삭제 버튼을 클릭했을 때는 이벤트가 발생하지 않고, 탭을 유지한 상태에서 필터가 되어야하므로 해당 조건문이 필요함.
+        ///// 탭을 클릭하면, 해당 탭의 이벤트(html)정보가 발생한다. 
+        ///// not done, done 모드에서는 탭을 클릭하지 않고 탭을 유지하면서 체크버튼을 클릭했을 때 필터링이 되어야하므로, 탭 클릭으로 인한 이벤트가 발생하지 않는다. 
+        ///// 그래서 조건을 만든다. 이벤트가 없어도 조건문 아래 수행코드가 실행되어야 함.
+    if(event) {
+        tabMode = event.target.id; 
+    }
+
     filterList = [] //
     const underline = document.getElementById("under-line")
 
@@ -147,9 +150,9 @@ function filter(event) {
                 filterList.push(taskList[i]);
             }
         }
+        render()
         underline.style.width = "85px";
         underline.style.left = "60px";
-        render()
         // console.log("진행중", filterList)
     }else if(tabMode === "done") {
         // 끝난 task 표시
@@ -161,6 +164,7 @@ function filter(event) {
         underline.style.width = "60px";
         underline.style.left = "161px";
         render()
+
     }
 }
 
